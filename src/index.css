@@ -1,6 +1,7 @@
 .body{
   background-color: #222121;
   color: white;
+  height: 100%;
 }
 
 .main-container {
@@ -66,7 +67,6 @@
   padding: 8px;
 }
 
-/* CSS */
 .tab {
   position: absolute;
   width: 100%;
@@ -114,7 +114,7 @@
 
 @keyframes slideOutToRight {
   from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+  to { transform: translateX(100%); } 
 }
 
 

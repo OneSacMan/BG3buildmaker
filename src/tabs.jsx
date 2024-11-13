@@ -1,41 +1,63 @@
-const tabs = document.querySelectorAll('.tab-btn');
-const tabContents = document.querySelectorAll('.tab-content .tab');
-const line = document.querySelector('.line');
-let activeTab = 0; // Track the currently active tab
+import { useState, useRef } from 'react'
 
-tabs.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    if (index === activeTab) return; // Ignore if the same tab is clicked
+export function Tabs() {
+  const [activeTab, setActiveTab] = useState(0);
+  const [prevTab, setPrevTab] = useState(0);
+  const lineRef = useRef(null);
+  
+  const handleTabClick = (event, index) => {
+    if (activeTab === index) return;
 
-    tabs.forEach(button => button.classList.remove('active'));
-    button.classList.add('active');
+    setPrevTab(activeTab);
+    setActiveTab(index);
+    lineRef.current.style.width = event.currentTarget.offsetWidth + "px";
+    lineRef.current.style.left = event.currentTarget.offsetLeft + "px";
+  }
 
-    // Adjust the line under the tab
-    line.style.width = e.target.offsetWidth + "px";
-    line.style.left = e.target.offsetLeft + "px";
+  const tabClass = (index) => {
+    let tabClassName = "tab";
 
-    // Set up direction for the slide animation
-    const isNext = index > activeTab;
-    const outClass = isNext ? 'slide-out-left' : 'slide-out-right';
-    const inClass = isNext ? 'slide-in-right' : 'slide-in-left';
+    if (index === activeTab) {
+      tabClassName += prevTab < activeTab ? " active slide-in-right" : " active slide-in-left";
+    }
+    else if (index > activeTab) {
+      tabClassName += " slide-out-right" 
+    } else if (index < activeTab) {
+      tabClassName += " slide-out-left"
+    }
 
-    // Apply outgoing animation to the current tab
-    const outgoingTab = tabContents[activeTab];
-    outgoingTab.classList.remove('active', 'slide-in-left', 'slide-in-right');
-    outgoingTab.classList.add(outClass);
-
-    // Apply incoming animation to the new tab simultaneously
-    const incomingTab = tabContents[index];
-    incomingTab.classList.remove('slide-out-left', 'slide-out-right');
-    incomingTab.classList.add('active', inClass);
-
-    // Update active tab index
-    activeTab = index;
-  });
-});
-
-// Initialize first tab as active on load
-tabs[0].classList.add('active');
-tabContents[0].classList.add('active');
-line.style.width = tabs[0].offsetWidth + "px";
-line.style.left = tabs[0].offsetLeft + "px";
+    return tabClassName;
+  }
+  
+  return <div className="left-section">
+  <div id="tab" className="tab-box">
+  <button className="tab-btn" onClick={(e) => handleTabClick(e, 0)}>BACKGROUND</button>
+  <button className="tab-btn" onClick={(e) => handleTabClick(e, 1)}>CLASSES</button>
+  <button className="tab-btn" onClick={(e) => handleTabClick(e, 2)}>ABILITIES</button>
+  <button className="tab-btn" onClick={(e) => handleTabClick(e, 3)}>SPELLS</button>
+  <button className="tab-btn" onClick={(e) => handleTabClick(e, 4)}>EQUIPMENT</button>
+  <button className="tab-btn" onClick={(e) => handleTabClick(e, 5)}>ILLITHID</button>
+  <div className="line" ref={lineRef}></div>
+  </div>
+  <div id="tabs" className="tab-content movintabs">
+  <div className={tabClass(0)}>
+      Eric
+  </div>
+  <div className={tabClass(1)} >
+      Is
+  </div>
+  <div className={tabClass(2)}>
+      A
+  </div>
+  <div className={tabClass(3)} >
+      Fucking
+  </div>
+  <div className={tabClass(4)} >
+      Jew
+  </div>
+  <div className={tabClass(5)}>
+      gasafsadsadf
+  </div>
+  </div>
+</div>
+}
